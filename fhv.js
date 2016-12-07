@@ -1,6 +1,6 @@
 /** Set our variables: margins, x-axis and y-axis **/
 //create the title of our graph
-var title = "Uber Versus Lyft";
+var title = "Uber/Lyft Versus Green Taxis";
     
 
 var formatNumber = d3.format("d");
@@ -59,12 +59,11 @@ var svg = d3.select("body").append("svg")
  function formatCurrency(d) {
     var s = formatNumber(d / 1e6);
      return d === y.domain()[1]
-      ? "50,000" + s + " thousand rides"
+      ? "60,000" + s + " thousand rides"
       : "";
 };
 
-
-d3.csv("hails.csv", function(error, collection) {
+d3.csv("fhv.csv", function(error, collection) {
 
     collection.forEach(function(d) {
       d.dtg = parsedtg(d.date_entered);
@@ -91,7 +90,7 @@ d3.csv("hails.csv", function(error, collection) {
 
     x.domain(d3.extent(data, function(d) { return d.dtg; }));
 
-    y.domain([-10000,10000]);
+    y.domain([-12500,10000]);
 
     svg.datum(data);
 
@@ -105,6 +104,7 @@ d3.csv("hails.csv", function(error, collection) {
         .attr("id", "clip-above")
         .append("path")
         .attr("d", area.y0(0));
+    
 /** create our axis, lines, and style the region representing the difference between two graphs **/
     
     //create our x-axis
@@ -143,21 +143,21 @@ d3.csv("hails.csv", function(error, collection) {
     //color the difference betweeen the two graphs with purple to represent lyft
     svg.append("a")
         .append("path")
-        .attr("class", "area above")
+        .attr("class", "area above1")
         .attr("clip-path", "url(#clip-above)")
         .attr("d", area.y0(function(d) { return y(d["Lyft"]); }));
 
     //color the difference between the two graphs with red to represent uber
     svg.append("a")
         .append("path")
-        .attr("class", "area below")
+        .attr("class", "area below1")
         .attr("clip-path", "url(#clip-below)")
         .attr("d", area.y0(function(d) { return y(d["Lyft"]); }));
 
 
     // ******* Title Block ********
     svg.append("text") // Title shadow
-      .attr("x", (width / 2))
+      .attr("x", (width / 2) + 75)
       .attr("y", 50 )
       .attr("text-anchor", "middle")
       .style("font-size", "30px")
@@ -165,7 +165,7 @@ d3.csv("hails.csv", function(error, collection) {
       .text(title);
 
     svg.append("text") // Title
-      .attr("x", (width / 2))
+      .attr("x", (width / 2) + 75)
       .attr("y", 50 )
       .attr("text-anchor", "middle")
       .style("font-size", "30px")
@@ -181,7 +181,7 @@ d3.csv("hails.csv", function(error, collection) {
       .attr("y", height+(margin.bottom/2) )
       .attr("width", xox)
       .attr("height", "25")
-      .attr("class", "area below");
+      .attr("class", "area below1");
     
     //Shadow for the uber rides box
     svg.append("text") 
@@ -191,7 +191,7 @@ d3.csv("hails.csv", function(error, collection) {
       .attr("text-anchor", "middle")
       .style("font-size", "18px")
       .attr("class", "shadow")
-      .text("Rides provided by Uber");
+      .text("Rides provided by Uber/Lyft");
     
      //Rectangle representing color for Lyft rides
     svg.append("rect") 
@@ -199,7 +199,7 @@ d3.csv("hails.csv", function(error, collection) {
       .attr("y", height+(margin.bottom/2) )
       .attr("width", xox)
       .attr("height", "25")
-      .attr("class", "area above");
+      .attr("class", "area above1");
     
     // shadow for the lyft rides box
     svg.append("text") 
@@ -209,7 +209,7 @@ d3.csv("hails.csv", function(error, collection) {
       .attr("text-anchor", "middle")
       .style("font-size", "18px")
       .attr("class", "shadow")
-      .text("Rides Provided by Lyft");
+      .text("Rides Provided by Green Taxis");
 
     
     //Text inside the Lyft rides box
@@ -221,7 +221,7 @@ d3.csv("hails.csv", function(error, collection) {
       .attr("text-anchor", "middle")
       .style("font-size", "18px")
       .style("stroke", "none")
-      .text("Rides Provided by Lyft");
+      .text("Rides Provided by Green Taxis");
      // Science Legend Text
     svg.append("a")
       .append("text")
@@ -231,7 +231,7 @@ d3.csv("hails.csv", function(error, collection) {
       .attr("text-anchor", "middle")
       .style("font-size", "18px")
       .style("stroke", "none")
-      .text("Rides provided by Uber");
+      .text("Rides provided by Uber/Lyft");
 
 });
 
